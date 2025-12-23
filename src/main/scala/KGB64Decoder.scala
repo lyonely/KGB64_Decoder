@@ -33,8 +33,16 @@ object KGB64Decoder {
       System.exit(1)
     }
     
+    val encoded_text: String = args(0)
+    
+    // If it doesn't look like KGB64, just print it as-is
+    if (!encoded_text.startsWith("H4sIAAA")) {
+      println(encoded_text)
+      System.exit(0)
+    }
+    
     try {
-      val result = decode(args(0))
+      val result = decode(encoded_text)
       val parsed: Either[ParsingFailure, Json] = parse(result)
       
       parsed match {
