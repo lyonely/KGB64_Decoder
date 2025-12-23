@@ -13,8 +13,8 @@ enablePlugins(GraalVMNativeImagePlugin)
 
 graalVMNativeImageOptions ++= Seq(
   "--no-fallback",
-  "--initialize-at-build-time=scala,com.esotericsoftware",
-  "--initialize-at-run-time=com.esotericsoftware.kryo.util.Util",
+  "--initialize-at-build-time=scala",
+  "--initialize-at-run-time=com.esotericsoftware.kryo.util.Util,com.esotericsoftware.kryo.unsafe.UnsafeUtil",
   "-H:+ReportExceptionStackTraces",
   "--verbose",
   "-J-Xmx2G",
