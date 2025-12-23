@@ -1,0 +1,31 @@
+# sbt
+target/
+project/target/
+project/project/
+lib_managed/
+src_managed/
+project/boot/
+.history
+.cache
+.lib/
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+.bloop/
+.metals/
+.vscode/
+*.log
+
+# Mac
+.DS_Store
+
+# Build artifacts
+*.jar
+*.class
+core
+hs_err_pid*.log
+
+# Docker build files
+Dockerfile.build
+build.log
