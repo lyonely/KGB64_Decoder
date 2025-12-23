@@ -18,5 +18,6 @@ graalVMNativeImageOptions ++= Seq(
   "-H:+ReportExceptionStackTraces",
   "--verbose",
   "-J-Xmx2G",
-  "--gc=serial"
+  "--gc=serial",
+  "-march=compatibility"
 )

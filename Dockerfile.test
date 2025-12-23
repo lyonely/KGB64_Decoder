@@ -1,0 +1,16 @@
+FROM debian:bookworm-slim
+
+# Install any dependencies if needed (though the binary should be standalone)
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the binary
+COPY ./kgb64-decoder /usr/local/bin/kgb64-decoder
+RUN chmod +x /usr/local/bin/kgb64-decoder
+
+# Set working directory
+WORKDIR /app
+
+# Default command shows usage
+ENTRYPOINT ["/usr/local/bin/kgb64-decoder"]
