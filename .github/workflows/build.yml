@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-linux:
+  build-linux-x64:
     runs-on: ubuntu-latest
     
     steps:
@@ -38,5 +38,67 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: kgb64-decoder-linux-x64
+        path: target/graalvm-native-image/kgb64-decoder
+        retention-days: 30
+
+  build-linux-aarch64:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+      with:
+        platforms: arm64
+    
+    - name: Build in ARM64 container
+      run: |
+        docker run --rm --platform linux/arm64 \
+          -v ${{ github.workspace }}:/workspace \
+          -w /workspace \
+          ubuntu:22.04 bash -c "
+            apt-get update && \
+            apt-get install -y curl build-essential libz-dev && \
+            curl -s 'https://get.sdkman.io' | bash && \
+            bash -c 'source \$HOME/.sdkman/bin/sdkman-init.sh && \
+            sdk install java 21-graalce && \
+            sdk install sbt && \
+            sbt GraalVMNativeImage/packageBin'
+          "
+    
+    - name: Upload binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: kgb64-decoder-linux-aarch64
+        path: target/graalvm-native-image/kgb64-decoder
+        retention-days: 30
+
+  build-macos-aarch64:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '21'
+        distribution: 'graalvm-community'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        native-image-job-reports: 'true'
+    
+    - name: Setup sbt
+      run: brew install sbt
+    
+    - name: Build native image
+      run: sbt GraalVMNativeImage/packageBin
+    
+    - name: Upload binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: kgb64-decoder-macos-aarch64
         path: target/graalvm-native-image/kgb64-decoder
         retention-days: 30
