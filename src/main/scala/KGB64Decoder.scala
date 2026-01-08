@@ -28,12 +28,14 @@ object KGB64Decoder {
   }
 
   def main(args: Array[String]): Unit = {
-    if (args.length == 0) {
-      System.err.println("Usage: kgb64-decoder <base64-encoded-string>")
+    // Read from stdin
+    val encoded_text: String = scala.io.Source.stdin.mkString.trim
+    
+    if (encoded_text.isEmpty) {
+      System.err.println("Usage: echo <base64-encoded-string> | kgb64-decoder")
+      System.err.println("       or: kgb64-decoder < file.txt")
       System.exit(1)
     }
-    
-    val encoded_text: String = args(0)
     
     // If it doesn't look like KGB64, just print it as-is
     if (!encoded_text.startsWith("H4sIAAA")) {
